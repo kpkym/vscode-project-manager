@@ -96,6 +96,44 @@ export async function activate(context: vscode.ExtensionContext) {
     provider.refresh();
   });
 
+  reg('projectManager.addCurrentToGroup', async () => {
+    const folders = vscode.workspace.workspaceFolders;
+    if (!folders || folders.length === 0) {
+      vscode.window.showErrorMessage('No folder is open in the current workspace.');
+      return;
+    }
+    const folderPath = folders[0].uri.fsPath;
+
+    const groups = configManager.getConfig().groups;
+    const NEW_GROUP = '$(add) New group...';
+
+    const picked = await vscode.window.showQuickPick(
+      [NEW_GROUP, ...groups.map(g => g.name)],
+      { placeHolder: 'Select a group to add this project to' }
+    );
+    if (!picked) return;
+
+    let groupName: string;
+    if (picked === NEW_GROUP) {
+      const newName = await vscode.window.showInputBox({ prompt: 'Group name' });
+      if (!newName) return;
+      await configManager.addGroup(newName);
+      groupName = newName;
+    } else {
+      groupName = picked;
+    }
+
+    const defaultName = path.basename(folderPath);
+    const name = await vscode.window.showInputBox({
+      prompt: 'Project display name',
+      value: defaultName,
+    });
+    if (!name) return;
+
+    await configManager.addProject(groupName, { name, path: folderPath });
+    provider.refresh();
+  });
+
   // ── Utility commands ────────────────────────────────────────────────────
 
   reg('projectManager.editConfig', async () => {
