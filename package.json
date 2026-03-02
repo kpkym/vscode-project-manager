@@ -32,7 +32,8 @@
       { "command": "projectManager.addProject", "title": "Add Project" },
       { "command": "projectManager.openProject", "title": "Open in New Window" },
       { "command": "projectManager.renameProject", "title": "Rename Project" },
-      { "command": "projectManager.removeProject", "title": "Remove Project" }
+      { "command": "projectManager.removeProject", "title": "Remove Project" },
+      { "command": "projectManager.addCurrentToGroup", "title": "Project Manager: Add Current Folder to Project Manager" }
     ],
     "menus": {
       "view/title": [
