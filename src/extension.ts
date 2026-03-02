@@ -99,10 +99,15 @@ export async function activate(context: vscode.ExtensionContext) {
   reg('projectManager.addCurrentToGroup', async () => {
     const folders = vscode.workspace.workspaceFolders;
     if (!folders || folders.length === 0) {
-      vscode.window.showErrorMessage('No folder is open in the current workspace.');
+      await vscode.window.showErrorMessage('No folder is open in the current workspace.');
       return;
     }
-    const folderPath = folders[0].uri.fsPath;
+    const activeUri = vscode.window.activeTextEditor?.document.uri;
+    const activeFolder = activeUri
+      ? vscode.workspace.getWorkspaceFolder(activeUri)
+      : undefined;
+    const folder = activeFolder ?? folders[0];
+    const folderPath = folder.uri.fsPath;
 
     const groups = configManager.getConfig().groups;
     const NEW_GROUP = '$(add) New group...';
@@ -117,6 +122,10 @@ export async function activate(context: vscode.ExtensionContext) {
     if (picked === NEW_GROUP) {
       const newName = await vscode.window.showInputBox({ prompt: 'Group name' });
       if (!newName) return;
+      if (configManager.getConfig().groups.some(g => g.name === newName)) {
+        await vscode.window.showErrorMessage(`Group "${newName}" already exists.`);
+        return;
+      }
       await configManager.addGroup(newName);
       groupName = newName;
     } else {
