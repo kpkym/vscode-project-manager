@@ -1,0 +1,65 @@
+{
+  "name": "vscode-project-manager",
+  "displayName": "Project Manager",
+  "description": "Manage and quickly open saved projects from the sidebar",
+  "version": "0.1.0",
+  "publisher": "kpkym",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "project-manager-container",
+          "title": "Project Manager",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "project-manager-container": [
+        { "id": "projectManagerView", "name": "Projects" }
+      ]
+    },
+    "commands": [
+      { "command": "projectManager.refresh", "title": "Refresh", "icon": "$(refresh)" },
+      { "command": "projectManager.editConfig", "title": "Edit Config File", "icon": "$(gear)" },
+      { "command": "projectManager.addGroup", "title": "Add Group", "icon": "$(add)" },
+      { "command": "projectManager.renameGroup", "title": "Rename Group" },
+      { "command": "projectManager.deleteGroup", "title": "Delete Group" },
+      { "command": "projectManager.addProject", "title": "Add Project" },
+      { "command": "projectManager.openProject", "title": "Open in New Window" },
+      { "command": "projectManager.renameProject", "title": "Rename Project" },
+      { "command": "projectManager.removeProject", "title": "Remove Project" }
+    ],
+    "menus": {
+      "view/title": [
+        { "command": "projectManager.addGroup", "when": "view == projectManagerView", "group": "navigation" },
+        { "command": "projectManager.refresh", "when": "view == projectManagerView", "group": "navigation" },
+        { "command": "projectManager.editConfig", "when": "view == projectManagerView", "group": "navigation" }
+      ],
+      "view/item/context": [
+        { "command": "projectManager.addProject",  "when": "view == projectManagerView && viewItem == group",   "group": "1_group@1" },
+        { "command": "projectManager.renameGroup",  "when": "view == projectManagerView && viewItem == group",   "group": "1_group@2" },
+        { "command": "projectManager.deleteGroup",  "when": "view == projectManagerView && viewItem == group",   "group": "1_group@3" },
+        { "command": "projectManager.openProject",  "when": "view == projectManagerView && viewItem == project", "group": "2_project@1" },
+        { "command": "projectManager.renameProject","when": "view == projectManagerView && viewItem == project", "group": "2_project@2" },
+        { "command": "projectManager.removeProject","when": "view == projectManagerView && viewItem == project", "group": "2_project@3" }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "bun run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "bunx vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "@types/vscode": "^1.109.0",
+    "@vscode/vsce": "^3.7.1",
+    "typescript": "^5.9.3"
+  }
+}
