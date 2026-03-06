@@ -180,8 +180,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const defaultConfig = {
       scanDirs: [],
-      scanMarker: '',
-      scanMaxDepth: 3,
+      scanMarker: '.gitignore',
+      scanMaxDepth: 5,
       groups: [],
     };
 
