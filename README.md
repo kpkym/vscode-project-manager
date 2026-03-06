@@ -11,6 +11,7 @@ A lightweight VS Code extension for managing and quickly switching between proje
 - **Add current folder** — Quickly add the currently open workspace to any group via the Command Palette
 - **Project scanning** — Automatically discover projects in configured directories by looking for a marker file (e.g., `.gitignore`)
 - **Config file init** — Bootstrap a config file with sensible defaults from the title bar
+- **Stale project cleanup** — Refresh automatically removes projects whose paths no longer exist on disk
 - **External edit support** — Config file changes made outside VS Code are picked up automatically
 - **Configurable config path** — Override the default config location via the `projectManager.configDir` setting
 
@@ -18,7 +19,7 @@ A lightweight VS Code extension for managing and quickly switching between proje
 
 1. Install the extension
 2. Click the **Project Manager** icon in the activity bar
-3. Click the **Init Config** button (file-add icon) in the view title bar to create a config file, or start adding groups with the **+** button
+3. Click the **Init Config** button (file-add icon) in the view title bar to create a config file, or add groups via the context menu
 
 ## Commands
 
@@ -35,7 +36,7 @@ A lightweight VS Code extension for managing and quickly switching between proje
 | Scan Projects | Discover projects in configured scan directories |
 | Init Config | Create or reset the config file with defaults |
 | Edit Config File | Open the JSON config file in the editor |
-| Refresh | Reload the config and refresh the tree view |
+| Refresh | Reload config, remove stale projects, rescan, and refresh the tree view |
 
 ## Configuration
 

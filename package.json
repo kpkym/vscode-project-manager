@@ -50,10 +50,8 @@
     },
     "menus": {
       "view/title": [
-        { "command": "projectManager.addGroup", "when": "view == projectManagerView", "group": "navigation" },
         { "command": "projectManager.refresh", "when": "view == projectManagerView", "group": "navigation" },
         { "command": "projectManager.editConfig", "when": "view == projectManagerView", "group": "navigation" },
-        { "command": "projectManager.scanProjects", "when": "view == projectManagerView", "group": "navigation" },
         { "command": "projectManager.initConfig", "when": "view == projectManagerView", "group": "navigation" }
       ],
       "view/item/context": [

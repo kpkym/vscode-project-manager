@@ -22,10 +22,10 @@ No test framework is configured. To test, use VS Code's Extension Development Ho
 5 source files in `src/`:
 
 - **types.ts** - Data model: `Config` contains `Group[]`, each `Group` contains `Project[]` (name + path). Config also has optional scan fields (`scanDirs`, `scanMarker`, `scanMaxDepth`).
-- **configManager.ts** - Reads/writes the JSON config file. Provides CRUD for groups and projects, plus `importScannedProjects()` for bulk-importing scan results. All mutations call `save()` which writes back to disk. Config path resolved via `getConfigPath()` which reads the `projectManager.configDir` VS Code setting.
+- **configManager.ts** - Reads/writes the JSON config file. Provides CRUD for groups and projects, plus `importScannedProjects()` for bulk-importing scan results and `removeStaleProjects()` for pruning entries whose paths no longer exist. All mutations call `save()` which writes back to disk. Config path resolved via `getConfigPath()` which reads the `projectManager.configDir` VS Code setting.
 - **treeItems.ts** - VS Code `TreeItem` subclasses: `GroupItem` (collapsible folders) and `ProjectItem` (leaf nodes with click-to-open). The `contextValue` property (`'group'` / `'project'`) controls which context menu commands appear (must match `viewItem` conditions in `package.json`).
 - **projectTreeProvider.ts** - `TreeDataProvider` that maps config data to the tree view. Two levels: groups at root, projects as children.
-- **extension.ts** - Entry point. Registers all command handlers, the tree provider, and a `FileSystemWatcher` to auto-reload when the config file changes externally. Contains the `scanProjects` walk logic that recursively finds projects by marker file.
+- **extension.ts** - Entry point. Registers all command handlers, the tree provider, and a `FileSystemWatcher` to auto-reload when the config file changes externally. Contains the `scanProjects` walk logic that recursively finds projects by marker file. The refresh command automatically cleans stale projects and triggers a rescan.
 
 ## Key Conventions
 

@@ -154,6 +154,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
   reg('projectManager.refresh', async () => {
     await configManager.load();
+    await configManager.removeStaleProjects();
+    await vscode.commands.executeCommand('projectManager.scanProjects');
     provider.refresh();
   });
 

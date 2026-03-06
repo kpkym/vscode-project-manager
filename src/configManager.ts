@@ -102,6 +102,28 @@ export class ConfigManager {
     await this.save();
   }
 
+  async removeStaleProjects(): Promise<number> {
+    let removed = 0;
+    for (const group of this.config.groups) {
+      const before = group.projects.length;
+      group.projects = group.projects.filter(p => {
+        try {
+          require('fs').accessSync(p.path);
+          return true;
+        } catch {
+          return false;
+        }
+      });
+      removed += before - group.projects.length;
+    }
+    // Remove empty groups
+    this.config.groups = this.config.groups.filter(g => g.projects.length > 0);
+    if (removed > 0) {
+      await this.save();
+    }
+    return removed;
+  }
+
   private requireGroup(name: string): Group {
     const group = this.config.groups.find(g => g.name === name);
     if (!group) throw new Error(`Group "${name}" not found`);
