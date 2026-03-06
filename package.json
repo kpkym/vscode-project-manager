@@ -33,13 +33,27 @@
       { "command": "projectManager.openProject", "title": "Open in New Window" },
       { "command": "projectManager.renameProject", "title": "Rename Project" },
       { "command": "projectManager.removeProject", "title": "Remove Project" },
-      { "command": "projectManager.addCurrentToGroup", "title": "Project Manager: Add Current Folder to Project Manager" }
+      { "command": "projectManager.addCurrentToGroup", "title": "Project Manager: Add Current Folder to Project Manager" },
+      { "command": "projectManager.scanProjects", "title": "Scan Projects", "icon": "$(search)" },
+      { "command": "projectManager.initConfig", "title": "Init Config", "icon": "$(file-add)" }
     ],
+    "configuration": {
+      "title": "Project Manager",
+      "properties": {
+        "projectManager.configDir": {
+          "type": "string",
+          "default": "",
+          "description": "Directory for the config file. Defaults to ~/.config/vscode if empty."
+        }
+      }
+    },
     "menus": {
       "view/title": [
         { "command": "projectManager.addGroup", "when": "view == projectManagerView", "group": "navigation" },
         { "command": "projectManager.refresh", "when": "view == projectManagerView", "group": "navigation" },
-        { "command": "projectManager.editConfig", "when": "view == projectManagerView", "group": "navigation" }
+        { "command": "projectManager.editConfig", "when": "view == projectManagerView", "group": "navigation" },
+        { "command": "projectManager.scanProjects", "when": "view == projectManagerView", "group": "navigation" },
+        { "command": "projectManager.initConfig", "when": "view == projectManagerView", "group": "navigation" }
       ],
       "view/item/context": [
         { "command": "projectManager.addProject",  "when": "view == projectManagerView && viewItem == group",   "group": "1_group@1" },

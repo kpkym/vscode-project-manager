@@ -10,4 +10,7 @@ export interface Group {
 
 export interface Config {
   groups: Group[];
+  scanDirs?: string[];
+  scanMarker?: string;
+  scanMaxDepth?: number;
 }

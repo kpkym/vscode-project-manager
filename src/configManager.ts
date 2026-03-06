@@ -1,27 +1,29 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as os from 'os';
+import * as vscode from 'vscode';
 import { Config, Group, Project } from './types';
 
-const CONFIG_PATH = path.join(
-  os.homedir(),
-  '.config', 'vscode', 'vscode-project-manager.json'
-);
+function getConfigPath(): string {
+  const configured = vscode.workspace.getConfiguration('projectManager').get<string>('configDir');
+  const dir = configured || path.join(os.homedir(), '.config', 'vscode');
+  return path.join(dir, 'vscode-project-manager.json');
+}
 
 export class ConfigManager {
   private config: Config = { groups: [] };
 
   getConfigPath(): string {
-    return CONFIG_PATH;
+    return getConfigPath();
   }
 
   async load(): Promise<Config> {
     try {
-      const raw = await fs.readFile(CONFIG_PATH, 'utf-8');
+      const raw = await fs.readFile(getConfigPath(), 'utf-8');
       this.config = JSON.parse(raw) as Config;
     } catch (err: any) {
       if (err.code === 'ENOENT') {
-        await fs.mkdir(path.dirname(CONFIG_PATH), { recursive: true });
+        await fs.mkdir(path.dirname(getConfigPath()), { recursive: true });
         await this.save();
       } else {
         throw err;
@@ -31,8 +33,8 @@ export class ConfigManager {
   }
 
   async save(): Promise<void> {
-    await fs.mkdir(path.dirname(CONFIG_PATH), { recursive: true });
-    await fs.writeFile(CONFIG_PATH, JSON.stringify(this.config, null, 2), 'utf-8');
+    await fs.mkdir(path.dirname(getConfigPath()), { recursive: true });
+    await fs.writeFile(getConfigPath(), JSON.stringify(this.config, null, 2), 'utf-8');
   }
 
   getConfig(): Config {
@@ -63,6 +65,27 @@ export class ConfigManager {
     const group = this.requireGroup(groupName);
     group.projects.push(project);
     await this.save();
+  }
+
+  async importScannedProjects(grouped: Map<string, Project[]>): Promise<number> {
+    let added = 0;
+    for (const [groupName, projects] of grouped) {
+      let group = this.config.groups.find(g => g.name === groupName);
+      if (!group) {
+        group = { name: groupName, projects: [] };
+        this.config.groups.push(group);
+      }
+      for (const project of projects) {
+        if (!group.projects.some(p => p.path === project.path)) {
+          group.projects.push(project);
+          added++;
+        }
+      }
+    }
+    if (added > 0) {
+      await this.save();
+    }
+    return added;
   }
 
   async renameProject(groupName: string, oldName: string, newName: string): Promise<void> {
