@@ -217,7 +217,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const grouped = new Map<string, { name: string; path: string }[]>();
 
-    async function walk(dir: string, depth: number, topLevelDir: string | null): Promise<void> {
+    async function walk(scanRootName: string, dir: string, depth: number, topLevelDir: string | null): Promise<void> {
       if (depth > scanMaxDepth) return;
       let entries;
       try {
@@ -227,13 +227,14 @@ export async function activate(context: vscode.ExtensionContext) {
       }
 
       // Check for marker file in this directory
-      if (topLevelDir !== null && depth >= 2) {
+      if (depth >= 1) {
         const markerPath = path.join(dir, scanMarker);
         try {
           await fs.access(markerPath);
-          const projects = grouped.get(topLevelDir) ?? [];
+          const groupName = depth === 1 ? scanRootName : (topLevelDir ?? scanRootName);
+          const projects = grouped.get(groupName) ?? [];
           projects.push({ name: path.basename(dir), path: dir });
-          grouped.set(topLevelDir, projects);
+          grouped.set(groupName, projects);
           return;
         } catch {
           // Marker not found, continue
@@ -245,7 +246,7 @@ export async function activate(context: vscode.ExtensionContext) {
         if (!entry.isDirectory() || entry.name.startsWith('.')) continue;
         const childPath = path.join(dir, entry.name);
         const nextTopLevel = depth === 0 ? entry.name : topLevelDir;
-        await walk(childPath, depth + 1, nextTopLevel);
+        await walk(scanRootName, childPath, depth + 1, nextTopLevel);
       }
     }
 
@@ -258,7 +259,7 @@ export async function activate(context: vscode.ExtensionContext) {
             : scanDir;
           try {
             await fs.access(resolvedDir);
-            await walk(resolvedDir, 0, null);
+            await walk(path.basename(resolvedDir), resolvedDir, 0, null);
           } catch {
             // Skip dirs that don't exist
           }

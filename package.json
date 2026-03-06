@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "publisher": "kpkym",
   "engines": { "vscode": "^1.85.0" },
+  "icon": "resources/icon.png",
   "categories": ["Other"],
   "activationEvents": [],
   "main": "./out/extension.js",
@@ -14,7 +15,7 @@
         {
           "id": "project-manager-container",
           "title": "Project Manager",
-          "icon": "resources/icon.svg"
+          "icon": "resources/icon.png"
         }
       ]
     },
