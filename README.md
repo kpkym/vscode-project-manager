@@ -69,6 +69,14 @@ The config file lives at `~/.config/vscode/vscode-project-manager.json` by defau
 
 When scanning, projects are grouped by their top-level parent directory within each scan root.
 
+## Installation
+
+```bash
+bash install.sh
+```
+
+This builds the extension, installs it into VS Code, and cleans up the `.vsix` artifact. Reload VS Code to activate.
+
 ## Development
 
 ```bash

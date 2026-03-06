@@ -4,7 +4,7 @@
   "description": "Manage and quickly open saved projects from the sidebar",
   "version": "0.1.0",
   "publisher": "kpkym",
-  "engines": { "vscode": "^1.85.0" },
+  "engines": { "vscode": "^1.109.0" },
   "icon": "resources/icon.png",
   "categories": ["Other"],
   "activationEvents": [],
@@ -70,7 +70,7 @@
     "vscode:prepublish": "bun run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "package": "bunx vsce package"
+    "package": "bunx vsce package --skip-license --allow-missing-repository"
   },
   "devDependencies": {
     "@types/node": "^25.3.3",
