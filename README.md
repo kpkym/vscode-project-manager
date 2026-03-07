@@ -13,7 +13,7 @@ A lightweight VS Code extension for managing and quickly switching between proje
 - **Config file init** — Bootstrap a config file with sensible defaults from the title bar
 - **Stale project cleanup** — Refresh automatically removes projects whose paths no longer exist on disk
 - **External edit support** — Config file changes made outside VS Code are picked up automatically
-- **Configurable config path** — Override the default config location via the `projectManager.configDir` setting
+- **Configurable config path** — Override the default config file location via the `projectManager.configFile` setting
 
 ## Getting Started
 
@@ -40,7 +40,7 @@ A lightweight VS Code extension for managing and quickly switching between proje
 
 ## Configuration
 
-The config file lives at `~/.config/vscode/vscode-project-manager.json` by default. You can override the directory with the `projectManager.configDir` setting.
+The config file lives at `~/.config/vscode-project-manager/settings.json` by default. You can override the full path with the `projectManager.configFile` setting.
 
 ### Config file structure
 

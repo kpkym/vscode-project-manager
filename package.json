@@ -41,10 +41,10 @@
     "configuration": {
       "title": "Project Manager",
       "properties": {
-        "projectManager.configDir": {
+        "projectManager.configFile": {
           "type": "string",
           "default": "",
-          "description": "Directory for the config file. Defaults to ~/.config/vscode if empty."
+          "description": "Full path to the config file. Defaults to ~/.config/vscode-project-manager/settings.json if empty."
         }
       }
     },

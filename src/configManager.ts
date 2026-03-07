@@ -5,9 +5,8 @@ import * as vscode from 'vscode';
 import { Config, Group, Project } from './types';
 
 function getConfigPath(): string {
-  const configured = vscode.workspace.getConfiguration('projectManager').get<string>('configDir');
-  const dir = configured || path.join(os.homedir(), '.config', 'vscode');
-  return path.join(dir, 'vscode-project-manager.json');
+  const configured = vscode.workspace.getConfiguration('projectManager').get<string>('configFile');
+  return configured || path.join(os.homedir(), '.config', 'vscode-project-manager', 'settings.json');
 }
 
 export class ConfigManager {
