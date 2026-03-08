@@ -24,7 +24,7 @@ export class ProjectItem extends vscode.TreeItem {
     this.iconPath = new vscode.ThemeIcon('repo');
     // Left-click triggers openProject command
     this.command = {
-      command: 'projectManager.openProject',
+      command: 'projectManager.openProjectInCurrentWindow',
       title: 'Open Project',
       arguments: [this],
     };

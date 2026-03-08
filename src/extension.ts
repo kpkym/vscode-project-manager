@@ -24,6 +24,11 @@ export async function activate(context: vscode.ExtensionContext) {
     await vscode.commands.executeCommand('vscode.openFolder', uri, true);
   });
 
+  reg('projectManager.openProjectInCurrentWindow', async (item: ProjectItem) => {
+    const uri = vscode.Uri.file(item.project.path);
+    await vscode.commands.executeCommand('vscode.openFolder', uri, false);
+  });
+
   reg('projectManager.renameProject', async (item: ProjectItem) => {
     const newName = await vscode.window.showInputBox({
       prompt: 'New project name',

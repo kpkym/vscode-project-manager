@@ -31,7 +31,8 @@
       { "command": "projectManager.renameGroup", "title": "Rename Group" },
       { "command": "projectManager.deleteGroup", "title": "Delete Group" },
       { "command": "projectManager.addProject", "title": "Add Project" },
-      { "command": "projectManager.openProject", "title": "Open in New Window" },
+      { "command": "projectManager.openProject", "title": "Open in New Window", "icon": "$(link-external)" },
+      { "command": "projectManager.openProjectInCurrentWindow", "title": "Open in Current Window" },
       { "command": "projectManager.renameProject", "title": "Rename Project" },
       { "command": "projectManager.removeProject", "title": "Remove Project" },
       { "command": "projectManager.addCurrentToGroup", "title": "Project Manager: Add Current Folder to Project Manager" },
@@ -58,9 +59,11 @@
         { "command": "projectManager.addProject",  "when": "view == projectManagerView && viewItem == group",   "group": "1_group@1" },
         { "command": "projectManager.renameGroup",  "when": "view == projectManagerView && viewItem == group",   "group": "1_group@2" },
         { "command": "projectManager.deleteGroup",  "when": "view == projectManagerView && viewItem == group",   "group": "1_group@3" },
-        { "command": "projectManager.openProject",  "when": "view == projectManagerView && viewItem == project", "group": "2_project@1" },
-        { "command": "projectManager.renameProject","when": "view == projectManagerView && viewItem == project", "group": "2_project@2" },
-        { "command": "projectManager.removeProject","when": "view == projectManagerView && viewItem == project", "group": "2_project@3" }
+        { "command": "projectManager.openProject", "when": "view == projectManagerView && viewItem == project", "group": "inline" },
+        { "command": "projectManager.openProjectInCurrentWindow",  "when": "view == projectManagerView && viewItem == project", "group": "2_project@1" },
+        { "command": "projectManager.openProject", "when": "view == projectManagerView && viewItem == project", "group": "2_project@2" },
+        { "command": "projectManager.renameProject","when": "view == projectManagerView && viewItem == project", "group": "2_project@3" },
+        { "command": "projectManager.removeProject","when": "view == projectManagerView && viewItem == project", "group": "2_project@4" }
       ]
     }
   },
