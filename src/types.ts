@@ -9,8 +9,11 @@ export interface Group {
 }
 
 export interface Config {
-  groups: Group[];
   scanDirs?: string[];
   scanMarker?: string;
   scanMaxDepth?: number;
+}
+
+export interface Cache {
+  groups: Group[];
 }

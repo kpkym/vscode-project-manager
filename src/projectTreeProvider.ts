@@ -14,19 +14,14 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 
   getChildren(element?: TreeNode): vscode.ProviderResult<TreeNode[]> {
-    const config = this.configManager.getConfig();
-
     if (!element) {
-      // Root level: return all GroupItems
-      return config.groups.map(g => new GroupItem(g));
+      return this.configManager.getGroups().map(g => new GroupItem(g));
     }
 
     if (element instanceof GroupItem) {
-      // Second level: return ProjectItems for this group
       return element.group.projects.map(p => new ProjectItem(p, element.group.name));
     }
 
-    // ProjectItems are leaf nodes
     return [];
   }
 

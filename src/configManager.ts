@@ -2,77 +2,84 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as os from 'os';
 import * as vscode from 'vscode';
-import { Config, Group, Project } from './types';
+import { Config, Cache, Group, Project } from './types';
 
 function getConfigPath(): string {
   const configured = vscode.workspace.getConfiguration('projectManager').get<string>('configFile');
   return configured || path.join(os.homedir(), '.config', 'vscode-project-manager', 'settings.json');
 }
 
+function getCachePath(): string {
+  return path.join(os.homedir(), '.cache', 'vscode-project-manager', 'projects.json');
+}
+
 export class ConfigManager {
-  private config: Config = { groups: [] };
+  private config: Config = {};
+  private cache: Cache = { groups: [] };
 
   getConfigPath(): string {
     return getConfigPath();
   }
 
-  async load(): Promise<Config> {
+  getCachePath(): string {
+    return getCachePath();
+  }
+
+  async load(): Promise<void> {
+    // Load config
     try {
       const raw = await fs.readFile(getConfigPath(), 'utf-8');
       this.config = JSON.parse(raw) as Config;
     } catch (err: any) {
       if (err.code === 'ENOENT') {
         await fs.mkdir(path.dirname(getConfigPath()), { recursive: true });
-        await this.save();
+        await this.saveConfig();
       } else {
         throw err;
       }
     }
-    return this.config;
+
+    // Load cache
+    try {
+      const raw = await fs.readFile(getCachePath(), 'utf-8');
+      this.cache = JSON.parse(raw) as Cache;
+    } catch (err: any) {
+      if (err.code === 'ENOENT') {
+        await fs.mkdir(path.dirname(getCachePath()), { recursive: true });
+        await this.saveCache();
+      } else {
+        throw err;
+      }
+    }
   }
 
-  async save(): Promise<void> {
+  async saveConfig(): Promise<void> {
     await fs.mkdir(path.dirname(getConfigPath()), { recursive: true });
     await fs.writeFile(getConfigPath(), JSON.stringify(this.config, null, 2), 'utf-8');
+  }
+
+  async saveCache(): Promise<void> {
+    await fs.mkdir(path.dirname(getCachePath()), { recursive: true });
+    await fs.writeFile(getCachePath(), JSON.stringify(this.cache, null, 2), 'utf-8');
   }
 
   getConfig(): Config {
     return this.config;
   }
 
-  // ── Group operations ────────────────────────────────────────────────────
-
-  async addGroup(name: string): Promise<void> {
-    this.config.groups.push({ name, projects: [] });
-    await this.save();
+  getGroups(): Group[] {
+    return this.cache.groups;
   }
 
-  async renameGroup(oldName: string, newName: string): Promise<void> {
-    const group = this.requireGroup(oldName);
-    group.name = newName;
-    await this.save();
-  }
-
-  async deleteGroup(name: string): Promise<void> {
-    this.config.groups = this.config.groups.filter(g => g.name !== name);
-    await this.save();
-  }
-
-  // ── Project operations ──────────────────────────────────────────────────
-
-  async addProject(groupName: string, project: Project): Promise<void> {
-    const group = this.requireGroup(groupName);
-    group.projects.push(project);
-    await this.save();
-  }
+  // ── Scan operations ────────────────────────────────────────────────────
 
   async importScannedProjects(grouped: Map<string, Project[]>): Promise<number> {
     let added = 0;
     for (const [groupName, projects] of grouped) {
-      let group = this.config.groups.find(g => g.name === groupName);
+      let group = this.cache.groups.find(g => g.name === groupName);
       if (!group) {
         group = { name: groupName, projects: [] };
-        this.config.groups.push(group);
+        this.cache.groups.push(group);
       }
       for (const project of projects) {
         if (!group.projects.some(p => p.path === project.path)) {
@@ -82,28 +89,14 @@ export class ConfigManager {
       }
     }
     if (added > 0) {
-      await this.save();
+      await this.saveCache();
     }
     return added;
   }
 
-  async renameProject(groupName: string, oldName: string, newName: string): Promise<void> {
-    const group = this.requireGroup(groupName);
-    const proj = group.projects.find(p => p.name === oldName);
-    if (!proj) throw new Error(`Project "${oldName}" not found in group "${groupName}"`);
-    proj.name = newName;
-    await this.save();
-  }
-
-  async removeProject(groupName: string, projectName: string): Promise<void> {
-    const group = this.requireGroup(groupName);
-    group.projects = group.projects.filter(p => p.name !== projectName);
-    await this.save();
-  }
-
   async removeStaleProjects(): Promise<number> {
     let removed = 0;
-    for (const group of this.config.groups) {
+    for (const group of this.cache.groups) {
       const before = group.projects.length;
       group.projects = group.projects.filter(p => {
         try {
@@ -116,16 +109,10 @@ export class ConfigManager {
       removed += before - group.projects.length;
     }
     // Remove empty groups
-    this.config.groups = this.config.groups.filter(g => g.projects.length > 0);
+    this.cache.groups = this.cache.groups.filter(g => g.projects.length > 0);
     if (removed > 0) {
-      await this.save();
+      await this.saveCache();
     }
     return removed;
-  }
-
-  private requireGroup(name: string): Group {
-    const group = this.config.groups.find(g => g.name === name);
-    if (!group) throw new Error(`Group "${name}" not found`);
-    return group;
   }
 }
