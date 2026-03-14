@@ -29,6 +29,10 @@ export async function activate(context: vscode.ExtensionContext) {
     await vscode.commands.executeCommand('vscode.openFolder', uri, false);
   });
 
+  reg('projectManager.revealInFinder', async (item: ProjectItem) => {
+    await vscode.commands.executeCommand('revealFileInOS', vscode.Uri.file(item.project.path));
+  });
+
   // ── Utility commands ────────────────────────────────────────────────────
 
   reg('projectManager.editConfig', async () => {

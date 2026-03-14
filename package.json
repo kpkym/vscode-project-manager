@@ -30,7 +30,8 @@
       { "command": "projectManager.openProject", "title": "Open in New Window", "icon": "$(link-external)" },
       { "command": "projectManager.openProjectInCurrentWindow", "title": "Open in Current Window" },
       { "command": "projectManager.scanProjects", "title": "Scan Projects", "icon": "$(search)" },
-      { "command": "projectManager.initConfig", "title": "Init Config", "icon": "$(file-add)" }
+      { "command": "projectManager.initConfig", "title": "Init Config", "icon": "$(file-add)" },
+      { "command": "projectManager.revealInFinder", "title": "Reveal in Finder" }
     ],
     "configuration": {
       "title": "Project Manager",
@@ -50,8 +51,7 @@
       ],
       "view/item/context": [
         { "command": "projectManager.openProject", "when": "view == projectManagerView && viewItem == project", "group": "inline" },
-        { "command": "projectManager.openProjectInCurrentWindow",  "when": "view == projectManagerView && viewItem == project", "group": "2_project@1" },
-        { "command": "projectManager.openProject", "when": "view == projectManagerView && viewItem == project", "group": "2_project@2" }
+        { "command": "projectManager.revealInFinder", "when": "view == projectManagerView && viewItem == project", "group": "2_project@1" }
       ]
     }
   },
