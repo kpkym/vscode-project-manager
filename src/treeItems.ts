@@ -5,7 +5,7 @@ export class GroupItem extends vscode.TreeItem {
   readonly contextValue = 'group'; // MUST match viewItem == group in package.json
 
   constructor(public readonly group: Group) {
-    super(group.name, vscode.TreeItemCollapsibleState.Expanded);
+    super(group.name, vscode.TreeItemCollapsibleState.Collapsed);
     this.tooltip = group.name;
     this.iconPath = new vscode.ThemeIcon('folder');
   }

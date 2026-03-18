@@ -31,7 +31,9 @@
       { "command": "projectManager.openProjectInCurrentWindow", "title": "Open in Current Window" },
       { "command": "projectManager.scanProjects", "title": "Scan Projects", "icon": "$(search)" },
       { "command": "projectManager.initConfig", "title": "Init Config", "icon": "$(file-add)" },
-      { "command": "projectManager.revealInFinder", "title": "Reveal in Finder" }
+      { "command": "projectManager.revealInFinder", "title": "Reveal in Finder" },
+      { "command": "projectManager.expandAll", "title": "Expand All Groups", "icon": "$(expand-all)" },
+      { "command": "projectManager.collapseAll", "title": "Collapse All Groups", "icon": "$(collapse-all)" }
     ],
     "configuration": {
       "title": "Project Manager",
@@ -45,9 +47,11 @@
     },
     "menus": {
       "view/title": [
-        { "command": "projectManager.refresh", "when": "view == projectManagerView", "group": "navigation" },
-        { "command": "projectManager.editConfig", "when": "view == projectManagerView", "group": "navigation" },
-        { "command": "projectManager.initConfig", "when": "view == projectManagerView", "group": "navigation" }
+        { "command": "projectManager.expandAll", "when": "view == projectManagerView && !projectManager.expanded", "group": "navigation@1" },
+        { "command": "projectManager.collapseAll", "when": "view == projectManagerView && projectManager.expanded", "group": "navigation@1" },
+        { "command": "projectManager.refresh", "when": "view == projectManagerView", "group": "navigation@2" },
+        { "command": "projectManager.editConfig", "when": "view == projectManagerView", "group": "navigation@3" },
+        { "command": "projectManager.initConfig", "when": "view == projectManagerView", "group": "navigation@4" }
       ],
       "view/item/context": [
         { "command": "projectManager.openProject", "when": "view == projectManagerView && viewItem == project", "group": "inline" },

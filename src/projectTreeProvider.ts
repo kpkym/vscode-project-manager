@@ -7,15 +7,40 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   readonly onDidChangeTreeData: vscode.Event<TreeNode | undefined | void> =
     this._onDidChangeTreeData.event;
 
+  private treeView: vscode.TreeView<TreeNode> | undefined;
+  private cachedGroups: GroupItem[] = [];
+
   constructor(private readonly configManager: ConfigManager) {}
+
+  setTreeView(treeView: vscode.TreeView<TreeNode>): void {
+    this.treeView = treeView;
+  }
+
+  async expandAll(): Promise<void> {
+    for (const group of this.cachedGroups) {
+      try {
+        await this.treeView?.reveal(group, { expand: true });
+      } catch {
+        // ignore if reveal fails
+      }
+    }
+  }
 
   getTreeItem(element: TreeNode): vscode.TreeItem {
     return element;
   }
 
+  getParent(element: TreeNode): vscode.ProviderResult<TreeNode> {
+    if (element instanceof ProjectItem) {
+      return this.cachedGroups.find(g => g.group.name === element.groupName);
+    }
+    return undefined;
+  }
+
   getChildren(element?: TreeNode): vscode.ProviderResult<TreeNode[]> {
     if (!element) {
-      return this.configManager.getGroups().map(g => new GroupItem(g));
+      this.cachedGroups = this.configManager.getGroups().map(g => new GroupItem(g));
+      return this.cachedGroups;
     }
 
     if (element instanceof GroupItem) {

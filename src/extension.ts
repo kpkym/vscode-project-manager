@@ -11,7 +11,9 @@ export async function activate(context: vscode.ExtensionContext) {
   await configManager.load();
 
   const provider = new ProjectTreeProvider(configManager);
-  vscode.window.registerTreeDataProvider('projectManagerView', provider);
+  const treeView = vscode.window.createTreeView('projectManagerView', { treeDataProvider: provider });
+  provider.setTreeView(treeView);
+  context.subscriptions.push(treeView);
 
   // Helper: register command and track disposable
   const reg = (cmd: string, fn: (...args: any[]) => any) =>
@@ -31,6 +33,25 @@ export async function activate(context: vscode.ExtensionContext) {
 
   reg('projectManager.revealInFinder', async (item: ProjectItem) => {
     await vscode.commands.executeCommand('revealFileInOS', vscode.Uri.file(item.project.path));
+  });
+
+  // ── Expand / Collapse all ──────────────────────────────────────────────
+
+  let expanded = false;
+  const updateExpandedContext = () =>
+    vscode.commands.executeCommand('setContext', 'projectManager.expanded', expanded);
+  updateExpandedContext();
+
+  reg('projectManager.expandAll', async () => {
+    await provider.expandAll();
+    expanded = true;
+    updateExpandedContext();
+  });
+
+  reg('projectManager.collapseAll', async () => {
+    await vscode.commands.executeCommand('workbench.actions.treeView.projectManagerView.collapseAll');
+    expanded = false;
+    updateExpandedContext();
   });
 
   // ── Utility commands ────────────────────────────────────────────────────
