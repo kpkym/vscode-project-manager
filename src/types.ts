@@ -12,6 +12,7 @@ export interface Config {
   scanDirs?: string[];
   scanMarker?: string;
   scanMaxDepth?: number;
+  defaultExpanded?: boolean;
 }
 
 export interface Cache {

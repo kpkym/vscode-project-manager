@@ -39,7 +39,8 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   getChildren(element?: TreeNode): vscode.ProviderResult<TreeNode[]> {
     if (!element) {
-      this.cachedGroups = this.configManager.getGroups().map(g => new GroupItem(g));
+      const defaultExpanded = this.configManager.getConfig().defaultExpanded ?? true;
+      this.cachedGroups = this.configManager.getGroups().map(g => new GroupItem(g, defaultExpanded));
       return this.cachedGroups;
     }
 

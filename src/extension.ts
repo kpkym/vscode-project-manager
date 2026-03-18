@@ -37,7 +37,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
   // ── Expand / Collapse all ──────────────────────────────────────────────
 
-  let expanded = false;
+  let expanded = configManager.getConfig().defaultExpanded ?? true;
   const updateExpandedContext = () =>
     vscode.commands.executeCommand('setContext', 'projectManager.expanded', expanded);
   updateExpandedContext();
@@ -93,6 +93,7 @@ export async function activate(context: vscode.ExtensionContext) {
       scanDirs: [],
       scanMarker: '.gitignore',
       scanMaxDepth: 5,
+      defaultExpanded: true,
     };
 
     await fs.mkdir(path.dirname(configPath), { recursive: true });
