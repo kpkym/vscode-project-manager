@@ -60,10 +60,10 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "bun run compile",
+    "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "package": "bunx vsce package --skip-license --allow-missing-repository"
+    "package": "vsce package --skip-license --allow-missing-repository"
   },
   "devDependencies": {
     "@types/node": "^25.3.3",

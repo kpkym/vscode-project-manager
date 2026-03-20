@@ -9,10 +9,10 @@ A VS Code extension that adds a sidebar tree view for quickly opening projects d
 ## Build Commands
 
 ```bash
-bun run compile        # Compile TypeScript to out/
-bun run watch          # Compile in watch mode
-bun run package        # Package as .vsix using vsce
-bash install.sh        # Build, install extension, and clean up .vsix
+pnpm run compile        # Compile TypeScript to out/
+pnpm run watch          # Compile in watch mode
+pnpm run package        # Package as .vsix using vsce
+bash install.sh         # Build, install extension, and clean up .vsix
 ```
 
 No test framework is configured. To test, use VS Code's Extension Development Host (F5 in VS Code).
