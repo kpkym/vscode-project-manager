@@ -54,6 +54,30 @@ export async function activate(context: vscode.ExtensionContext) {
     updateExpandedContext();
   });
 
+  // ── Search / Filter ─────────────────────────────────────────────────────
+
+  const updateFilteredContext = (active: boolean) =>
+    vscode.commands.executeCommand('setContext', 'projectManager.filtered', active);
+  updateFilteredContext(false);
+
+  reg('projectManager.searchProjects', async () => {
+    const value = await vscode.window.showInputBox({ prompt: 'Filter projects by name', placeHolder: 'Type to filter...' });
+    if (value === undefined) return; // cancelled
+    if (value === '') {
+      provider.clearFilter();
+      updateFilteredContext(false);
+    } else {
+      provider.setFilter(value);
+      updateFilteredContext(true);
+      await provider.expandAll();
+    }
+  });
+
+  reg('projectManager.clearSearch', () => {
+    provider.clearFilter();
+    updateFilteredContext(false);
+  });
+
   // ── Utility commands ────────────────────────────────────────────────────
 
   reg('projectManager.editConfig', async () => {

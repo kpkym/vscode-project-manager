@@ -33,7 +33,9 @@
       { "command": "projectManager.initConfig", "title": "Init Config", "icon": "$(file-add)" },
       { "command": "projectManager.revealInFinder", "title": "Reveal in Finder" },
       { "command": "projectManager.expandAll", "title": "Expand All Groups", "icon": "$(expand-all)" },
-      { "command": "projectManager.collapseAll", "title": "Collapse All Groups", "icon": "$(collapse-all)" }
+      { "command": "projectManager.collapseAll", "title": "Collapse All Groups", "icon": "$(collapse-all)" },
+      { "command": "projectManager.searchProjects", "title": "Search Projects", "icon": "$(search)" },
+      { "command": "projectManager.clearSearch", "title": "Clear Search", "icon": "$(close)" }
     ],
     "configuration": {
       "title": "Project Manager",
@@ -47,11 +49,13 @@
     },
     "menus": {
       "view/title": [
-        { "command": "projectManager.expandAll", "when": "view == projectManagerView && !projectManager.expanded", "group": "navigation@1" },
-        { "command": "projectManager.collapseAll", "when": "view == projectManagerView && projectManager.expanded", "group": "navigation@1" },
-        { "command": "projectManager.refresh", "when": "view == projectManagerView", "group": "navigation@2" },
-        { "command": "projectManager.editConfig", "when": "view == projectManagerView", "group": "navigation@3" },
-        { "command": "projectManager.initConfig", "when": "view == projectManagerView", "group": "navigation@4" }
+        { "command": "projectManager.searchProjects", "when": "view == projectManagerView && !projectManager.filtered", "group": "navigation@5" },
+        { "command": "projectManager.clearSearch", "when": "view == projectManagerView && projectManager.filtered", "group": "navigation@5" },
+        { "command": "projectManager.expandAll", "when": "view == projectManagerView && !projectManager.expanded", "group": "navigation@4" },
+        { "command": "projectManager.collapseAll", "when": "view == projectManagerView && projectManager.expanded", "group": "navigation@4" },
+        { "command": "projectManager.refresh", "when": "view == projectManagerView", "group": "navigation@3" },
+        { "command": "projectManager.editConfig", "when": "view == projectManagerView", "group": "navigation@2" },
+        { "command": "projectManager.initConfig", "when": "view == projectManagerView", "group": "navigation@1" }
       ],
       "view/item/context": [
         { "command": "projectManager.openProject", "when": "view == projectManagerView && viewItem == project", "group": "inline" },

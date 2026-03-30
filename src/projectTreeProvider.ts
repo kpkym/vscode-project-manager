@@ -9,11 +9,22 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   private treeView: vscode.TreeView<TreeNode> | undefined;
   private cachedGroups: GroupItem[] = [];
+  private filterText = '';
 
   constructor(private readonly configManager: ConfigManager) {}
 
   setTreeView(treeView: vscode.TreeView<TreeNode>): void {
     this.treeView = treeView;
+  }
+
+  setFilter(text: string): void {
+    this.filterText = text.toLowerCase();
+    this.refresh();
+  }
+
+  clearFilter(): void {
+    this.filterText = '';
+    this.refresh();
   }
 
   async expandAll(): Promise<void> {
@@ -40,12 +51,20 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   getChildren(element?: TreeNode): vscode.ProviderResult<TreeNode[]> {
     if (!element) {
       const defaultExpanded = this.configManager.getConfig().defaultExpanded ?? true;
-      this.cachedGroups = this.configManager.getGroups().map(g => new GroupItem(g, defaultExpanded));
+      const groups = this.filterText
+        ? this.configManager.getGroups().filter(g =>
+            g.projects.some(p => p.name.toLowerCase().includes(this.filterText))
+          )
+        : this.configManager.getGroups();
+      this.cachedGroups = groups.map(g => new GroupItem(g, defaultExpanded || !!this.filterText));
       return this.cachedGroups;
     }
 
     if (element instanceof GroupItem) {
-      return element.group.projects.map(p => new ProjectItem(p, element.group.name));
+      const projects = this.filterText
+        ? element.group.projects.filter(p => p.name.toLowerCase().includes(this.filterText))
+        : element.group.projects;
+      return projects.map(p => new ProjectItem(p, element.group.name));
     }
 
     return [];
