@@ -81,7 +81,7 @@ This builds the extension, installs it into VS Code, and cleans up the `.vsix` a
 ## Development
 
 ```bash
-bun install
-bun run compile
+pnpm install
+pnpm run compile
 # Press F5 in VS Code to launch the Extension Development Host
 ```

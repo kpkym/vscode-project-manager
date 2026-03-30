@@ -13,11 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
+      - uses: pnpm/action-setup@v4
 
-      - run: bun install
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
 
-      - run: bun run package
+      - run: pnpm install
+
+      - run: pnpm run package
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
