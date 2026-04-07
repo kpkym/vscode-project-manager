@@ -2,9 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "pnpm: compile",
+      "label": "bun: compile",
       "type": "shell",
-      "command": "pnpm",
+      "command": "bun",
       "args": ["run", "compile"],
       "group": "build",
       "problemMatcher": ["$tsc"]

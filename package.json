@@ -64,12 +64,11 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run compile",
+    "vscode:prepublish": "bun run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "package": "vsce package --skip-license --allow-missing-repository"
   },
-  "packageManager": "pnpm@9.5.0",
   "devDependencies": {
     "@types/node": "^25.0.0",
     "@types/vscode": "^1.109.0",
