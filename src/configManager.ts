@@ -59,6 +59,9 @@ export class ConfigManager {
   }
 
   async saveCache(): Promise<void> {
+    for (const group of this.cache.groups) {
+      group.projects.sort((a, b) => a.name.localeCompare(b.name));
+    }
     await fs.mkdir(path.dirname(getCachePath()), { recursive: true });
     await fs.writeFile(getCachePath(), JSON.stringify(this.cache, null, 2), 'utf-8');
   }
