@@ -89,6 +89,7 @@ export async function activate(context: vscode.ExtensionContext) {
     await configManager.load();
     await configManager.removeStaleProjects();
     await vscode.commands.executeCommand('projectManager.scanProjects');
+    await configManager.saveCache();
     provider.refresh();
   });
 
